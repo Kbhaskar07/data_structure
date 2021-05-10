@@ -1,0 +1,98 @@
+/*Implementation of stack using array. */
+
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX 100
+
+//Function declaration
+void push(int *stk, int n);
+void pop(int *stk);
+void peek(int *stk);
+void view(int *stk);
+
+//Global variable
+int top=-1;
+
+//driver program
+void main()
+{
+    int stk[MAX], n, choice;
+    printf("\nEnter size of stack :");
+    scanf("%d",&n);
+    while(1)
+    {
+        printf("\nPlease Choose :-\n");
+        printf("1. Insert.\n2. Delete\n3. Peek\n4. View.\n5.Exit.\n");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1:
+            push(stk,n);
+            break;
+            case 2:
+            pop(stk);
+            break;
+            case 3:
+            peek(stk);
+            break;
+            case 4:
+            view(stk);
+            break;
+            case 5:
+            exit(0);
+            default:
+            printf("\nPlease Choose Correctly.");
+        }
+    }
+}
+
+//Function Definition
+void push(int *stk, int n)
+{
+    if(top==(n-1))
+    {
+        printf("\nOVERFLOW.");
+    }
+    else
+    {
+        top=top+1;
+        printf("\nEnter data :");
+        scanf("%d",&stk[top]);
+        printf("\n%d Inserted.",stk[top]);
+    }
+}
+
+void pop(int *stk)
+{
+    if(top==-1)
+    {
+        printf("\nUNDERFLOW");
+    }
+    else
+    {
+        printf("\n%d deleted.",stk[top]);
+        stk[top]=0;
+        top--;
+    }
+}
+
+void peek(int *stk)
+{
+    printf("\n%d",stk[top]);
+}
+
+void view(int *stk)
+{
+    int i;
+    if(top==-1)
+    {
+        printf("\nUNDERFLOW.");
+    }
+    else
+    {
+        for(i=top;i>=0;i--)
+        {
+            printf("%d\t",stk[i]);
+        }
+    }
+}

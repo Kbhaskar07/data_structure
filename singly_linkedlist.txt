@@ -1,0 +1,340 @@
+/*program for singly linear linked list. */
+
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct linkedlist
+{
+    int data;
+    struct linkedlist *next;
+}linked;
+
+//Functions for performing various operations.
+linked *insert_at_end(linked *head);
+linked *insert_at_begin(linked *head);
+linked *display(linked *head);
+linked *insert_at_position(linked *head);
+linked *delete_at_end(linked *head);
+linked *delete_at_begin(linked *head);
+linked *delete_at_position(linked *head);
+linked *search(linked *head);
+linked *sort(linked *head);
+
+//Global Variables
+linked *newnode=NULL, *temp=NULL, *tail=NULL;
+int node_count=0;
+
+//driver program
+int main()
+{
+    linked *head=NULL;
+    int choice;
+    do
+    {
+        printf("\nPlease Choose :-\n");
+        printf("1. Insert at End.\n2. Insert at Beginning.\n3. Insert at position.\n4. Delete at End.\n5. Delete at Beginning.\n6. Delete at Position.\n7. Display.\n8. Search.\n9. Sorting.\n10. Exit.\n");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+        case 1:
+            head=insert_at_end(head);
+            break;
+        case 2:
+            head=insert_at_begin(head);
+            break;
+        case 3:
+            head=insert_at_position(head);
+            break;
+        case 4:
+            head=delete_at_end(head);
+            break;
+        case 5:
+            head=delete_at_begin(head);
+            break;
+        case 6:
+            head=delete_at_position(head);
+            break;
+        case 7:
+            head=display(head);
+            break;
+        case 8:
+            head=search(head);
+            break;
+        case 9:
+            head=sort(head);
+            break;
+        case 10:
+            exit(0);
+        default:
+                printf("\nPlease choose correct option.");
+        }
+     }while (1);
+    return 0;
+}
+
+
+//Function Definition
+linked *insert_at_begin(linked *head)
+{
+    newnode=(linked *)malloc(sizeof(linked));
+    if(newnode==NULL)
+    {
+        printf("\nMemory not created.");
+        return head;
+    }
+    printf("\nEnter the data : ");
+    scanf("%d",&newnode->data);
+    newnode->next=head;
+    head=newnode;
+    if(newnode->next==NULL)
+    {
+        tail=newnode;
+    }
+    newnode=NULL;
+    node_count++;
+    return head;
+}
+
+linked *insert_at_end(linked *head)
+{
+    if(head==NULL)
+    {
+        head=insert_at_begin(head);
+        return head;
+    }
+    newnode=(linked *)malloc(sizeof(linked));
+    if(newnode==NULL)
+    {
+        printf("\nMemory not created.");
+        return head;
+    }
+    printf("\nEnter the data : ");
+    scanf("%d",&newnode->data);
+    newnode->next=NULL;
+    tail->next=newnode;
+    tail=newnode;
+    node_count++;
+    return head;
+}
+
+linked *insert_at_position(linked *head)
+{
+    int pos,count=1;
+    printf("\nEnter the position to insert data : ");
+    scanf("%d",&pos);
+    if(pos<1)
+    {
+        printf("\nPosition should be greater than 0");
+        return head;
+    }
+    if(pos>(node_count+1))
+        {
+            printf("\nLinkedlist is shorter than the entered position.");
+            return head;
+        }
+    if(pos==1)
+    {
+        head=insert_at_begin(head);
+        return head;
+    }
+    temp=head;
+    while(count!=(pos-1))
+    {
+        temp=temp->next;
+        count++;
+    }
+    newnode=(linked *)malloc(sizeof(linked));
+    if(newnode==NULL)
+    {
+        printf("\nMemory not created.");
+        return head;
+    }
+    printf("\nEnter the data :");
+    scanf("%d",&newnode->data);
+    newnode->next=temp->next;
+    temp->next=newnode;
+    temp=NULL;
+    if(newnode->next==NULL)
+    {
+        tail=newnode;
+    } 
+    node_count++;
+    return head;
+}
+
+linked *delete_at_begin(linked *head)
+{
+    if(head==NULL)
+    {
+        printf("\nLinkedlist is Empty.");
+        return head;
+    }
+    temp=head;
+    temp=temp->next;
+    printf("\n%d is deleted.",head->data);
+    free(head);
+    head=temp;
+    temp=NULL;
+    node_count--;
+    return head;
+}
+
+linked *delete_at_end(linked *head)
+{
+    if(tail==NULL)
+    {
+        printf("\nLinkedlist is Empty.");
+        return head;
+    }
+    if(node_count==1)
+    {
+        printf("\n%d is deleted.",head->data);
+        free(head);
+        head=NULL;
+        tail=NULL;
+        node_count--;
+        return head;
+    }
+    int count=1;
+    temp=head;
+    while(count<(node_count-1))
+    {
+        temp=temp->next;
+        count++;
+    }
+    printf("\n%d is deleted.",tail->data);
+    free(tail);
+    tail=temp;
+    temp->next=NULL;
+    temp=NULL;
+    node_count--;
+    return head;
+}
+
+linked *delete_at_position(linked *head)
+{
+    if(head==NULL)
+    {
+        printf("\nLinkedlist is Empty.");
+        return head;
+    }
+    int pos=0,count=1;
+    linked *new_temp=NULL;
+    printf("\nEnter the Position to delete data : ");
+    scanf("%d",&pos);
+    if(pos<1)
+    {
+        printf("\nPosition should be greater then 0");
+        return head;
+    }
+    if(pos>node_count)
+    {
+        printf("\nLinked list is shorter than the entered position.");
+        return head;
+    }
+    temp=head;
+    if(pos==1)
+    {
+        head=delete_at_begin(head);
+        return head;  
+    }
+    if(pos==node_count)
+    {
+        head=delete_at_end(head);
+        return head;
+    }
+    while(count<(pos-1))
+    {
+        temp=temp->next;
+        count++;
+    }
+    new_temp=temp;
+    new_temp=new_temp->next;
+    temp->next=new_temp->next;
+    printf("\n%d is deleted.",new_temp->data);
+    free(new_temp);
+    temp=NULL;
+    node_count--;
+    return head;
+}
+
+linked *display(linked *head)
+{
+    if(head==NULL)
+    {
+        printf("\nLinkedlist is Empty.");
+        return head;
+    }
+    temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d\t",temp->data);
+        temp=temp->next;
+    }
+    temp=NULL;
+    return head;
+}
+
+linked *search(linked *head)
+{
+    if(head==NULL)
+    {
+        printf("\nLinked List is Empty.");
+        return head;
+    }
+    int num=0,pos=0,flag=0;
+    printf("Enter the number to search : ");
+    scanf("%d",&num);
+    temp=head;
+    while(temp!=NULL)
+    {
+        pos++;
+        if(temp->data==num)
+        {
+            flag=1;
+            printf("\n%d found at Position %d",num,pos);
+
+        }
+        temp=temp->next;  
+    }
+    if(flag==0)
+    {
+        printf("\n%d not found.",num);
+        return head;
+    }
+    return head;
+}
+
+linked *sort(linked *head)
+{
+    if(head==NULL)
+    {
+        printf("\nLinked List is empty.");
+        return head;
+    }
+    int temp_data,i=1;
+    temp=head;
+    linked *next_temp=temp->next;
+    if(node_count==1)
+    {
+        printf("\nSorting done!");
+        return head;
+    }
+    for(i=1;i<=node_count;i++)
+    {
+        while(next_temp!=NULL)
+        {    
+            if(temp->data>next_temp->data)
+            {
+                temp_data=temp->data;
+                temp->data=next_temp->data;
+                next_temp->data=temp_data;
+            }
+            temp=temp->next;
+            next_temp=next_temp->next;
+        }
+        temp=head;
+        next_temp=temp->next;
+    }
+    printf("\nSorting done!");
+    return head;
+}

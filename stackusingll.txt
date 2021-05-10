@@ -1,0 +1,115 @@
+/*Implementation of stack using linked list. */
+
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct linkedlist
+{
+    int data;
+    struct linkedlist *next;
+}linked;
+
+//Function declaration
+linked *push(linked *head);
+linked *pop(linked *head);
+void peek(linked *head);
+linked *view(linked *head);
+
+//Global variable
+linked *newnode;
+
+//driver program
+void main()
+{
+    int choice;
+    linked *head=NULL;
+    while(1)
+    {
+        printf("\n\nPlease Choose :-\n");
+        printf("1. Insert.\n2. Delete\n3. Peek\n4. View.\n5.Exit.\n");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1:
+            head=push(head);
+            break;
+            case 2:
+            head=pop(head);
+            break;
+            case 3:
+            peek(head);
+            break;
+            case 4:
+            head=view(head);
+            break;
+            case 5:
+            exit(0);
+            default:
+            printf("\nPlease Choose Correctly.");
+        }
+    }
+}
+
+linked *push(linked *head)
+{
+    newnode=(linked *)malloc(sizeof(newnode));
+    if(newnode==NULL)
+    {
+        printf("\nOVERFLOW");
+        return head;
+    }
+    printf("\nEnter the data : ");
+    scanf("%d",&newnode->data);
+    if(head==NULL)
+    {
+        newnode->next=NULL;
+        head=newnode;
+    }
+    else
+    {
+        newnode->next=head;
+        head=newnode;
+    }
+    return head;
+}
+
+linked *pop(linked *head)
+{
+    if(head==NULL)
+    {
+        printf("\nUNDERFLOW.");
+        return head;
+    }
+    printf("\n%d deleted.",head->data);
+    head=head->next;
+    return head;
+}
+
+void peek(linked *head)
+{
+    if(head==NULL)
+    {
+        printf("\nUNDERFLOW.");
+    }
+    else
+    {
+        printf("\n%d",head->data);
+    }
+}
+
+linked *view(linked *head)
+{
+    if(head==NULL)
+    {
+        printf("\nUNDERFLOW.");
+        return head;
+    }
+    linked *temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d\t",temp->data);
+        temp=temp->next;
+    }
+    temp=NULL;
+    return head;
+}
